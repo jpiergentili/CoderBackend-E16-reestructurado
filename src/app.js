@@ -6,12 +6,15 @@ import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import initializePassport from './passport.config.js'
 import dotenv from 'dotenv';
+import { Server } from 'socket.io'
+import Sockets from './sockets.js'
 
-import viewsRouter from './routers/products.views.router.js'
+import productsRouter from './routers/product.router.js'
 import cartsRouter from './routers/carts.router.js'
-import cartRouter from './routers/cart.router.js'
+import viewsRouter from './routers/view.router.js'
 import sessionRouter from './routers/session.router.js'
 import mockingRouter from './routers/mocking.router.js'
+import chatRouter from './routers/chat.router.js'
 
 import errorMiddleware from './middlewares/error.middleware.js';
 import CustomError from './services/errors/custom_errors.js';
@@ -53,10 +56,12 @@ app.use(passport.session());
 //configuracion de la carpeta publica
 app.use(express.static('./src/public'))
 
-app.use('/api/carts', cartsRouter);
-app.use('/products', viewsRouter);
-app.use('/carts', cartRouter);
+app.use('/api/products', productsRouter)
+app.use('/api/carts', cartsRouter)
+app.use('/products', viewsRouter)
+app.use('/carts', viewsRouter)
 app.use('/mockingproducts', mockingRouter);
+app.use("/chat", chatRouter)
 
 // Middleware para manejar rutas no definidas
 app.all('*', (req, res, next) => {
@@ -69,18 +74,28 @@ app.all('*', (req, res, next) => {
     next(customError);
 });
 
-
 // Middleware de manejo de errores después de las rutas y Passport
 app.use(errorMiddleware);
 
 mongoose.set('strictQuery', false)
 
 //Conexión a la DB
-try{
-    await mongoose.connect(process.env.MONGO_URL, {dbName: process.env.MONGO_DBNAME})
-    console.log('DB connected!')    
+try {
+    await mongoose.connect(process.env.MONGO_URL, { dbName: process.env.MONGO_DBNAME });
+    console.log('DB connected!')
+
+    const server = app.listen(PORT, () => {
+        console.log('Server Up');
+        const io = new Server(server);
+        app.use((req, res, next) => {
+            req.io = io;
+            next();
+        });
+        Sockets(io);
+    });
 } catch (error) {
-    console.log("No se pudo conectar con la base de datos!!")
+    console.error("No se pudo conectar con la base de datos:", error);
+    process.exit(-1);
 }
 
-app.listen(PORT, () => console.log('Server UP'))
+

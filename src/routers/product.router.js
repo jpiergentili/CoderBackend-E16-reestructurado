@@ -17,7 +17,7 @@ const auth = (req, res, next) => {
   return res.send('Error de autenticación')
 }
 
-/* export const getProducts = async (req, res) => {
+export const getProducts = async (req, res) => {
   try {
       const limit = req.query.limit || 10
       const page = req.query.page || 1
@@ -63,7 +63,7 @@ const auth = (req, res, next) => {
           response: { status: 'error', error: err.message }
       }
   }
-} */
+}
 
 // Ruta para la vista Home donde se van a mostrar todos los productos
 router.get('/', auth, async (req, res, next) => {
