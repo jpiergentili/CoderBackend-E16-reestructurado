@@ -1,0 +1,18 @@
+<div class="container">
+  <h2 class="mt-5">Iniciar sesión</h2>
+  <form action="/sessions/login" method="POST" class="mt-3">
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" id="email" placeholder="Email" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Contraseña</label>
+      <input type="text" name="password" class="form-control" id="password" placeholder="Contraseña" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+  </form>
+  <hr>
+  <a id="github-button" class="btn btn-block btn-social btn-github" href="http://localhost:8080/sessions/github">
+    <i class="fa fa-github"></i> Sign in with Github
+  </a>
+</div>

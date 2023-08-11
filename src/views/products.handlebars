@@ -1,0 +1,62 @@
+<h2>List of products</h2>
+<div>
+    <table class="table" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Code</th>
+                <th>Stock</th>
+                {{#if isAdmin}}
+                <th></th>
+                <th></th>
+                {{/if}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each products.docs}}
+            <tr>
+                <td><a href="/products/{{this._id}}">{{this.title}}</a></td>
+                <td>{{this.description}}</td>
+                <td>{{this.price}}</td>
+                <td>{{this.code}}</td>
+                <td>{{this.stock}}</td>
+{{#if ../isAdmin}}
+    <td><a href="/products/update/{{this._id}}"><i class="bi bi-pencil-square"></i></a></td>
+    <td><a href="#" onclick="deleteProduct('{{this._id}}')"><i class="bi bi-trash"></i></a></td>
+{{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+    <div>
+        {{#if products.hasPrevPage}}
+        <a href="{{products.prevLink}}">Anterior</a>
+        {{/if}}
+        {{#if products.hasNextPage}}
+        <a href="{{products.nextLink}}">Siguiente</a>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+    function deleteProduct(productId) {
+        fetch(`/products/delete/${productId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload(); // Recargar la página después de eliminar el producto
+                } else {
+                    throw new Error('Error al eliminar el producto');
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+</script>

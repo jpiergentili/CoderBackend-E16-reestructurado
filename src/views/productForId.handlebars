@@ -1,0 +1,21 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <img src="{{product.thumbnail}}" alt="{{product.title}}" class="img-fluid w-50">
+        </div>
+        <div class="col-md-8">
+            <h2>{{product.title}}</h2>
+            <p><strong>Description: </strong>{{product.description}}</p>
+            <p><strong>Price: </strong> {{product.price}}</p>
+            <p><strong>Code: </strong> {{product.code}}</p>
+            <p><strong>Stock: </strong> {{product.stock}}</p>
+            <button class="btn btn-primary" onclick="addToCart('{{product._id}}')">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addToCart(productId) {
+        // Lógica para agregar el producto al carrito
+    }
+</script>

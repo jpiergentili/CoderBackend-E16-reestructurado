@@ -1,0 +1,41 @@
+<h1>Update a Product</h1>
+<hr />
+<div>
+    Title: <input type="text" id="title" name="title" value="{{product.title}}"><br>
+    Description: <input type="text" id="description" name="description" value="{{product.description}}"><br>
+    Category: <input type="text" id="category" name="category" value="{{product.category}}"><br>
+    Price: <input type="number" id="price" name="price" value="{{product.price}}"><br>
+    Code: <input type="text" id="code" name="code" value="{{product.code}}"><br>
+    Stock: <input type="number" id="stock" name="stock" value="{{product.stock}}"><br>
+    Thumbnail: <input type="text" id="thumbnail" name="thumbnail" value="{{product.thumbnail}}"><br>
+    <button onclick="updateProduct('{{product._id}}')">Actualizar</button>
+</div>
+
+<script>
+    function updateProduct(productId) {
+        fetch(`http://localhost:8080/products/${productId}`, {
+            method: 'put',
+            body: JSON.stringify({
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                price: document.getElementById('price').value,
+                thumbnail: document.getElementById('thumbnail').value,
+                code: document.getElementById('code').value,
+                stock: document.getElementById('stock').value
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = 'http://localhost:8080/products';
+            } else {
+                throw new Error('Error al actualizar el producto.');
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+</script>
